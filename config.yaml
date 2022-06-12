@@ -1,0 +1,51 @@
+video:
+  size: [ 1600,900 ]
+  track_width: 35cm=0.35/ 50-600
+  dashed_markings: 4.5cm=0.045/ 426-462
+  y_meters_per_pixel: 0.00125 # 30cm in 145px valori posibile pt y: 0.00125 / 0.00206896551
+  x_meters_per_pixel: 0.00059523809 # 35 cm in 588 px . val possibile : 0.00125 / 0.00059523809
+LKAS:
+  lanes_detection:
+    region_of_interest:
+      - [ 0,400 ] #upperleft
+      - [ 1599,400 ] #upperright
+      - [ 1599,899 ] #lowerright
+      - [ 0,899 ] #lowerleft
+    gaussian_blur: # noise reduction frame
+      active: true
+      kernel_size: [ 5,5 ]
+      deviation: 0
+    threshold: # convert image to dark and white pixels using adaptiveThreshold
+      active: true
+      adaptive: false
+      threshold: 150 # min pixel intensity to be considered white
+      block_size: 3 # for adaptive threshold
+      constant: 2 # for adaptive threshold
+    canny: # identifies edges/ lines comparing contrast
+      low_threshold: 50
+      high_threshold: 150
+    lines_hough_transform: # detects lines using houghTransformP
+      rho: 2
+      thetha: 0.01745329251 # ( pi/180)
+      threshold: 40 # minimum points required to intersect to describe a line
+      min_line_length: 10 # px
+      max_line_gap: 70 #px
+    warp_perspective:
+      src:
+        - [ 350,400 ] #upperleft
+        - [ 1250,400 ] #upperright
+        - [ 0,899 ] #lowerleft
+        - [ 1599,899 ] #lowerright
+      dst:
+        - [ 0, 0 ]
+        - [ 1599, 0 ]
+        - [ 0, 899 ]
+        - [ 1599, 899 ]
+    colour_filtering:
+      active: false
+      lower_white: [ 0, 160, 10 ] #HLS
+      upper_white: [ 255, 255, 255 ] #HLS
+    others:
+      line_marking_width: 0.02 #2cm
+      slope_difference: 0.1
+      orientation_pixel_difference : 4
